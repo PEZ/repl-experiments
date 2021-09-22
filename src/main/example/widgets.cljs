@@ -7,17 +7,15 @@
                 :or {on-press #()}} text]
   [:> rn/TouchableOpacity {:style (cond-> {:font-weight      :bold
                                            :font-size        18
-                                           :padding          6
                                            :background-color :blue
-                                           :border-radius    999
-                                           :margin-bottom    20}
+                                           :border-radius    999}
                                     :always (merge style)
                                     disabled? (merge {:background-color "#aaaaaa"}
                                                      disabled-style))
                            :on-press on-press
                            :disabled disabled?}
-   [:> rn/Text {:style (cond-> {:padding-left  12
-                                :padding-right 12
+   [:> rn/Text {:style (cond-> {:padding-horizontal 12
+                                :padding-vertical 6
                                 :font-weight   :bold
                                 :font-size     18
                                 :color         :white}
