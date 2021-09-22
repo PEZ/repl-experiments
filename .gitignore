@@ -16,7 +16,7 @@ app/*
 # See https://github.com/expo/fyi/blob/master/eas-build-archive.md for details and another option.
 !app/index.js
 .cpcache
+.cache
 /web-build
 .calva/output-window/
-.lsp/sqlite*.db
 .DS_Store
