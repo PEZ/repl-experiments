@@ -13,3 +13,8 @@
  :inc-counter
  (fn [db [_ _]]
    (update db :counter inc)))
+
+(reg-event-db
+ :set-counter-tapable
+ (fn [db [_ v]]
+   (assoc db :counter-tappable? v)))

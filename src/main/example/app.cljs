@@ -12,7 +12,7 @@
 (def cljs-splash (js/require "../assets/cljs.png"))
 
 (defn root []
-  (let [counter @(rf/subscribe [:get-counter])
+  (let [counter @(rf/subscribe [:fb-counter])
         tap-enabled? @(rf/subscribe [:counter-tappable?])]
     [:> rn/View {:style {:flex 1
                          :padding-vertical 50
@@ -43,6 +43,10 @@
                            :color       :blue}}
        "Using: shadow-cljs+expo+reagent+re-frame"]]
      [:> StatusBar {:style "auto"}]]))
+
+(comment
+  (rf/dispatch [:set-counter-tapable false])
+  (rf/dispatch [:set-counter-tapable true]))
 
 (defn start
   {:dev/after-load true}
