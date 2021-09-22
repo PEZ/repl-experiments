@@ -1,6 +1,6 @@
 (ns example.subs
   (:require [re-frame.core :refer [reg-sub]]
-            [main.example.fizz-buzz :refer [fizz-buzz]]))
+            [example.fizz-buzz :refer [fizz-buzz]]))
 
 (reg-sub
  :get-counter

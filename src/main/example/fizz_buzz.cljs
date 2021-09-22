@@ -1,4 +1,4 @@
-(ns main.example.fizz-buzz
+(ns example.fizz-buzz
   (:require [re-frame.core :as rf]))
 
 (defn multiple-of? [n d]
