@@ -23,20 +23,18 @@
    [:> rn/View {:style {:flex 8}}
     [:> rn/ScrollView {:style {:flex 1
                                :padding 10}}
-     (into [:> rn/View {:style {:flex 1
-                                :flex-direction :row
-                                :justify-content :center
-                                :margin 10
-                                :flex-wrap :wrap}}]
-           (map-indexed (fn [i x]
-                          [:> rn/Text {:key i
-                                       :style {:font-size 14
-                                               :padding-horizontal 4
-                                               :padding-vertical 1
-                                               :margin-vertical 3
-                                               :margin-horizontal 2
-                                               :border-width 0.5
-                                               :border-radius 3}} x])
-                        (range 500)))]]
+     [:> rn/View {:style {:flex 1
+                          :flex-direction :row
+                          :justify-content :center
+                          :margin 10
+                          :flex-wrap :wrap}}
+      [:> rn/Text {:style {:font-size 14
+                           :padding-horizontal 4
+                           :padding-vertical 1
+                           :margin-vertical 3
+                           :margin-horizontal 2
+                           :border-width 0.5
+                           :border-radius 3}}
+       "foo"]]]]
    [:> StatusBar {:style "auto"}]]
   )
