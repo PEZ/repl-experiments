@@ -2,4 +2,6 @@
 
 ;; initial state of app-db
 (def app-db {:counter 1
-             :counter-tappable? true})
+             :counter-tappable? true
+             :textinput-text ""
+             :cloud-text ""})

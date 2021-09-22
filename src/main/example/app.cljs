@@ -2,6 +2,7 @@
   (:require [example.events]
             [example.subs]
             [example.widgets :refer [button]]
+            [example.some-data :as some-data]
             [expo.root :as expo-root]
             ["expo-status-bar" :refer [StatusBar]]
             [re-frame.core :as rf]
@@ -10,6 +11,86 @@
 
 (def shadow-splash (js/require "../assets/shadow-cljs.png"))
 (def cljs-splash (js/require "../assets/cljs.png"))
+
+
+(defn most-frequent [words]
+  (->> words
+       (sort-by second)
+       (last)
+       (second)))
+
+(def largest-font-size 48)
+(def smallest-font-size 10)
+
+(defn font-size [freq highest]
+  (let [multiplier (/ (- largest-font-size smallest-font-size) highest)]
+    (+ smallest-font-size (* multiplier freq))))
+
+(comment
+  (def largest-font-size 48)
+  (def smallest-font-size 10)
+  (def highest 12)
+  (def freq 1)
+  (def multiplier (/ (- largest-font-size smallest-font-size) highest))
+  (+ smallest-font-size (* multiplier freq))
+  (-> 0
+      ((fn font-size [freq highest]
+         (let [multiplier (/ (- largest-font-size smallest-font-size) highest)]
+           (+ smallest-font-size (* multiplier freq))))
+       (most-frequent @(rf/subscribe [:words]))))
+  )
+
+(defn new-root []
+  (let [text @(rf/subscribe [:textinput-text])
+        all-words @(rf/subscribe [:words])
+        highest-freq (most-frequent all-words)
+        words (->> all-words
+                   (sort-by second)
+                   (take-last 100)
+                   (shuffle))]
+    [:> rn/SafeAreaView {:style {:flex 1
+                                 :justify-content :space-between
+                                 :background-color :white}}
+     [:> rn/View {:style {:flex 4
+                          :align-items :stretch}}
+      [:> rn/TextInput {:multiline true
+                        :scroll-enabled true
+                        :value text
+                        :on-change-text (fn [t] 
+                                          (rf/dispatch-sync [:set-textinput-text t])
+                                          (r/flush))
+                        :style {:flex 1
+                                :margin 10
+                                :padding 5
+                                :font-size 14
+                                :color :blue
+                                :border-width 1}}]]
+     [:> rn/View {:style {:flex 1
+                          :align-self :center
+                          :justify-content :center}}
+      [button {:on-press #(rf/dispatch [:set-cloud-text text])
+               :style {:background-color :blue}}
+       "Work!"]]
+     [:> rn/View {:style {:flex 8}}
+      [:> rn/ScrollView {:style {:flex 1
+                                 :padding 10}}
+       (into
+        [:> rn/View {:style {:flex 1
+                             :flex-direction :row
+                             :justify-content :center
+                             :align-items :center
+                             :margin 10
+                             :flex-wrap :wrap}}]
+        (map-indexed (fn [i [word freq]]
+                       [:> rn/Text {:key i
+                                    :style {:font-size (font-size freq highest-freq)
+                                            :padding-horizontal 4
+                                            :margin-vertical 1
+                                            :margin-horizontal 2
+                                            :border-radius 3}}
+                        word])
+                     words))]]
+     [:> StatusBar {:style "auto"}]]))
 
 (defn root []
   (let [counter @(rf/subscribe [:fb-counter])
@@ -46,12 +127,13 @@
 
 (comment
   (rf/dispatch [:set-counter-tapable false])
-  (rf/dispatch [:set-counter-tapable true]))
+  (rf/dispatch [:set-counter-tapable true])
+  (rf/dispatch [:set-textinput-text some-data/some-text]))
 
 (defn start
   {:dev/after-load true}
   []
-  (expo-root/render-root (r/as-element [root])))
+  (expo-root/render-root (r/as-element [new-root])))
 
 (defn init []
   (rf/dispatch-sync [:initialize-db])

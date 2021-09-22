@@ -30,10 +30,8 @@
                           :flex-wrap :wrap}}
       [:> rn/Text {:style {:font-size 14
                            :padding-horizontal 4
-                           :padding-vertical 1
-                           :margin-vertical 3
+                           :margin-vertical 1
                            :margin-horizontal 2
-                           :border-width 0.5
                            :border-radius 3}}
        "foo"]]]]
    [:> StatusBar {:style "auto"}]]

@@ -3,7 +3,6 @@
    [re-frame.core :refer [reg-event-db]]
    [example.db :as db :refer [app-db]]))
 
-
 (reg-event-db
  :initialize-db
  (fn [_ _]
@@ -18,3 +17,13 @@
  :set-counter-tapable
  (fn [db [_ v]]
    (assoc db :counter-tappable? v)))
+
+(reg-event-db
+ :set-textinput-text
+ (fn [db [_ text]]
+   (assoc db :textinput-text text)))
+
+(reg-event-db
+ :set-cloud-text
+ (fn [db [_ text]]
+   (assoc db :cloud-text text)))
