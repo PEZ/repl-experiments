@@ -14,9 +14,9 @@ pom.xml
 app/*
 # Include this file to make EAS Build work.
 # See https://github.com/expo/fyi/blob/master/eas-build-archive.md for details and another option.
-!app/index.js
 .cpcache
 .cache
 /web-build
 .calva/output-window/
 .DS_Store
+app/index.js
