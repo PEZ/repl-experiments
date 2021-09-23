@@ -23,11 +23,6 @@
    (:textinput-text db)))
 
 (reg-sub
- :cloud-text
- (fn [db _]
-   (:cloud-text db)))
-
-(reg-sub
  :all-words
  (fn [db _]
    (:all-words db)))
