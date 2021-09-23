@@ -2,11 +2,14 @@
                 "src/test"]
 
  :dependencies [[reagent "1.1.0"]
-                [re-frame "1.2.0"]]
+                [re-frame "1.2.0"]
+                [re-frisk-remote "1.5.1"]]
 
  :builds       {:app {:target           :react-native
                       :init-fn          example.app/init
                       :output-dir       "app"
+                      :extra-paths      ["env/dev"]
                       :compiler-options {:infer-externs :auto}
                       :devtools         {:autoload true
-                                         :preloads [shadow.expo.keep-awake]}}}}
+                                         :preloads [shadow.expo.keep-awake
+                                                    re-frisk-remote.preload]}}}}
