@@ -33,7 +33,7 @@
                           :align-self :center
                           :justify-content :center}}
       [button {:on-press (fn [_e]
-                           (rf/dispatch [:set-cloud-text text]))
+                           (rf/dispatch [:update-cloud text]))
                :style {:background-color :blue}}
        "Work!"]]]))
 
@@ -65,12 +65,9 @@
   )
 
 (defn word-cloud [{:keys [style]}]
-  (let [all-words @(rf/subscribe [:words])
+  (let [all-words @(rf/subscribe [:all-words])
         highest-freq (most-frequent all-words)
-        words (->> all-words
-                   (sort-by second)
-                   (take-last 100)
-                   (shuffle))]
+        words @(rf/subscribe [:cloud-words])]
     [:> rn/View style
      [:> rn/ScrollView {:style {:flex 1
                                 :padding 10}}

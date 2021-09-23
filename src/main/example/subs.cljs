@@ -1,8 +1,6 @@
 (ns example.subs
   (:require [re-frame.core :refer [reg-sub]]
-            [example.fizz-buzz :refer [fizz-buzz]]
-            [example.some-data :as some-data]
-            [clojure.string :as string]))
+            [example.fizz-buzz :refer [fizz-buzz]]))
 
 (reg-sub
  :get-counter
@@ -29,33 +27,21 @@
  (fn [db _]
    (:cloud-text db)))
 
-(defn words-and-frequencies [words]
-  (->> words
-       (frequencies)))
-
-(defn grab-words [text]
-  (->> (string/split text #"\s+")
-       (map (fn [w] (string/replace w #"[-\W]" "")))
-       ;(map (fn [w] (string/replace w #"[’']s" "")))
-       (map string/lower-case)
-       (remove some-data/common-words)))
+(reg-sub
+ :all-words
+ (fn [db _]
+   (:all-words db)))
 
 (reg-sub
- :words
- :<- [:cloud-text]
- (fn [text _]
-   (-> text
-       (grab-words)
-       (words-and-frequencies))))
+ :cloud-words
+ (fn [db _]
+   (:cloud-words db)))
 
 (comment
+  (require '[clojure.string :as string])
   @(re-frame.core/subscribe [:textinput-text])
-  (-> @(re-frame.core/subscribe [:cloud-text])
+  (-> @(re-frame.core/subscribe [:textinput-text])
       (string/split #"\s+"))
 
-  (-> (grab-words @(re-frame.core/subscribe [:textinput-text]))
-      words-and-frequencies)
-
-  @(re-frame.core/subscribe [:words])
-  (string/split nil #"\s+")
-  )
+  @(re-frame.core/subscribe [:cloud-words])
+  (string/split nil #"\s+"))
