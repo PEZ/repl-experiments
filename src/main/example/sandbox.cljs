@@ -1,6 +1,10 @@
 (ns main.example.sandbox
   (:require [re-frame.core :as rf]))
 
+(def foo :foo)
+
+(def bar (range 20))
+
 (comment
   (def colt-express
     {:name "Colt Express"
