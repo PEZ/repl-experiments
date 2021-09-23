@@ -12,6 +12,30 @@
 (def shadow-splash (js/require "../assets/shadow-cljs.png"))
 (def cljs-splash (js/require "../assets/cljs.png"))
 
+(defn input-widget [{:keys [style]}]
+  (let [text @(rf/subscribe [:textinput-text])]
+    [:> rn/View {:style style}
+     [:> rn/View {:style {:flex 4
+                          :align-items :stretch}}
+      [:> rn/TextInput {:multiline true
+                        :scroll-enabled true
+                        :value text
+                        :on-change-text (fn [t]
+                                          (rf/dispatch-sync [:set-textinput-text t])
+                                          (r/flush))
+                        :style {:flex 1
+                                :margin 10
+                                :padding 5
+                                :font-size 14
+                                :color :blue
+                                :border-width 1}}]]
+     [:> rn/View {:style {:flex 1
+                          :align-self :center
+                          :justify-content :center}}
+      [button {:on-press (fn [_e]
+                           (rf/dispatch [:set-cloud-text text]))
+               :style {:background-color :blue}}
+       "Work!"]]]))
 
 (defn most-frequent [words]
   (->> words
@@ -40,57 +64,40 @@
        (most-frequent @(rf/subscribe [:words]))))
   )
 
-(defn new-root []
-  (let [text @(rf/subscribe [:textinput-text])
-        all-words @(rf/subscribe [:words])
+(defn word-cloud [{:keys [style]}]
+  (let [all-words @(rf/subscribe [:words])
         highest-freq (most-frequent all-words)
         words (->> all-words
                    (sort-by second)
                    (take-last 100)
                    (shuffle))]
-    [:> rn/SafeAreaView {:style {:flex 1
-                                 :justify-content :space-between
-                                 :background-color :white}}
-     [:> rn/View {:style {:flex 4
-                          :align-items :stretch}}
-      [:> rn/TextInput {:multiline true
-                        :scroll-enabled true
-                        :value text
-                        :on-change-text (fn [t] 
-                                          (rf/dispatch-sync [:set-textinput-text t])
-                                          (r/flush))
-                        :style {:flex 1
-                                :margin 10
-                                :padding 5
-                                :font-size 14
-                                :color :blue
-                                :border-width 1}}]]
-     [:> rn/View {:style {:flex 1
-                          :align-self :center
-                          :justify-content :center}}
-      [button {:on-press #(rf/dispatch [:set-cloud-text text])
-               :style {:background-color :blue}}
-       "Work!"]]
-     [:> rn/View {:style {:flex 8}}
-      [:> rn/ScrollView {:style {:flex 1
-                                 :padding 10}}
-       (into
-        [:> rn/View {:style {:flex 1
-                             :flex-direction :row
-                             :justify-content :center
-                             :align-items :center
-                             :margin 10
-                             :flex-wrap :wrap}}]
-        (map-indexed (fn [i [word freq]]
-                       [:> rn/Text {:key i
-                                    :style {:font-size (font-size freq highest-freq)
-                                            :padding-horizontal 4
-                                            :margin-vertical 1
-                                            :margin-horizontal 2
-                                            :border-radius 3}}
-                        word])
-                     words))]]
-     [:> StatusBar {:style "auto"}]]))
+    [:> rn/View style
+     [:> rn/ScrollView {:style {:flex 1
+                                :padding 10}}
+      (into
+       [:> rn/View {:style {:flex 1
+                            :flex-direction :row
+                            :justify-content :center
+                            :align-items :center
+                            :margin 10
+                            :flex-wrap :wrap}}]
+       (map-indexed (fn [i [word freq]]
+                      [:> rn/Text {:key i
+                                   :style {:font-size (font-size freq highest-freq)
+                                           :padding-horizontal 4
+                                           :margin-vertical 1
+                                           :margin-horizontal 2
+                                           :border-radius 3}}
+                       word])
+                    words))]]))
+
+(defn new-root []
+  [:> rn/SafeAreaView {:style {:flex 1
+                               :justify-content :space-between
+                               :background-color :white}}
+   [input-widget {:style {:flex 5}}]
+   [word-cloud {:style {:flex 8}}]
+   [:> StatusBar {:style "auto"}]])
 
 (defn root []
   (let [counter @(rf/subscribe [:fb-counter])
