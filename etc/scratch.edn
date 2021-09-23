@@ -1,0 +1,81 @@
+
+(defn input-widget [{:keys [style]}]
+  [:> rn/View {:style style}
+   [:> rn/View {:style {:flex 4
+                        :align-items :stretch}}
+    [:> rn/TextInput {:multiline true
+                      :scroll-enabled true
+                      ;:value ""
+                      :placeholder "Paste some text here :)"
+                      :on-change (fn [e])
+                      :style {:flex 1
+                              :margin 10
+                              :padding 5
+                              :font-size 14
+                              :color :blue
+                              :border-width 1}}]]
+   [:> rn/View {:style {:flex 1
+                        :align-self :center
+                        :justify-content :center}}
+    [button {:on-press (fn [_e])
+             :style {:background-color :blue}}
+     "Work!"]]])
+
+(defn word-cloud [{:keys [style]}]
+  [:> rn/View style
+   [:> rn/ScrollView {:style {:flex 1
+                              :padding 10}}
+    [:> rn/View {:style {:flex 1
+                         :flex-direction :row
+                         :justify-content :center
+                         :align-items :center
+                         :margin 10
+                         :flex-wrap :wrap}}
+     [:> rn/Text {:style {:font-size 30
+                          :padding-horizontal 4
+                          :margin-vertical 1
+                          :margin-horizontal 2
+                          :border-radius 3}}
+      "foo"]]]])
+
+(defn new-root []
+  [:> rn/SafeAreaView {:style {:flex 1
+                               :justify-content :space-between
+                               :background-color :white}}
+   [input-widget {:style {:flex 5}}]
+   [word-cloud {:style {:flex 8}}]
+   [:> StatusBar {:style "auto"}]])
+
+
+
+
+
+
+
+
+
+(defn most-frequent [words]
+  (->> words
+       (sort-by second)
+       (last)
+       (second)))
+
+(def largest-font-size 48)
+(def smallest-font-size 10)
+
+(defn font-size [freq highest]
+  (let [multiplier (/ (- largest-font-size smallest-font-size) highest)]
+    (+ smallest-font-size (* multiplier freq))))
+
+(comment
+  (def largest-font-size 48)
+  (def smallest-font-size 10)
+  (def highest 12)
+  (def freq 1)
+  (def multiplier (/ (- largest-font-size smallest-font-size) highest))
+  (+ smallest-font-size (* multiplier freq))
+  (-> 0
+      ((fn font-size [freq highest]
+         (let [multiplier (/ (- largest-font-size smallest-font-size) highest)]
+           (+ smallest-font-size (* multiplier freq))))
+       (most-frequent @(rf/subscribe [:words])))))
