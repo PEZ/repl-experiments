@@ -14,33 +14,39 @@
 (defn root []
   (let [counter @(rf/subscribe [:counter])
         tap-enabled? @(rf/subscribe [:counter-tappable?])]
-    [:> rn/View {:style {:flex 1
-                         :padding-vertical 50
-                         :justify-content :space-between
-                         :align-items :center
-                         :background-color :white}}
-     [:> rn/View {:style {:align-items :center}}
+    [:> rn/SafeAreaView {:style {:flex 1
+                                 :flex-direction :column
+                                 :justify-content :space-between
+                                 :background-color :white}}
+     [:> rn/View {:style {:flex 1
+                          :align-items :center}}
       [:> rn/Text {:style {:font-weight   :bold
                            :font-size     72
                            :color         :blue
                            :margin-bottom 20}} counter]
-      [button {:on-press (fn [_e] 
+      [button {:on-press (fn [_e]
                            (rf/dispatch [:inc-counter]))
                :disabled? (not tap-enabled?)
                :style {:background-color :blue}}
        "Tap me, I'll count"]]
-     [:> rn/View
-      [:> rn/View {:style {:flex-direction :row
-                           :align-items :center
-                           :margin-bottom 20}}
-       [:> rn/Image {:style {:width  160
-                             :height 160}
-                     :source cljs-splash}]
-       [:> rn/Image {:style {:width  160
-                             :height 160}
-                     :source shadow-splash}]]
-      [:> rn/Text {:style {:font-weight :normal
-                           :font-size   15
+     [:> rn/View {:style {:flex 1
+                          :justify-content :flex-end}}
+      [:> rn/View {:style {:flex 1
+                           :flex-direction :row
+                           :align-items :flex-end
+                           :justify-content :space-around
+                           :margin-bottom 15}}
+       [:> rn/View {:style {:margin 0}}
+        [:> rn/Image {:style {:width  180
+                              :height 180}
+                      :source cljs-splash}]]
+       [:> rn/View {:style {:margin 0}}
+        [:> rn/Image {:style {:width  180
+                              :height 180}
+                      :source shadow-splash}]]]
+      [:> rn/Text {:style {:align-self :center
+                           :font-weight :normal
+                           :font-size   19.3
                            :color       :blue}}
        "Using: shadow-cljs+expo+reagent+re-frame"]]
      [:> StatusBar {:style "auto"}]]))
