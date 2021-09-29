@@ -30,12 +30,14 @@
 (defn choose-cloud-words [all-words]
   (->> all-words
        (sort-by second)
-       (take-last 100)))
+       (take-last 100)
+       (shuffle)))
 
 (reg-sub
  :cloud-words
  :<- [:all-words]
- (fn [all-words _]
+ :<- [:get-counter]
+ (fn [[all-words _counter] _]
    (choose-cloud-words all-words)))
 
 (comment
