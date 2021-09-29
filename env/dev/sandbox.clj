@@ -1,5 +1,4 @@
-(ns sandbox
-  (:require [re-frame.core :as rf]))
+(ns sandbox)
 
 (def foo :foo)
 
