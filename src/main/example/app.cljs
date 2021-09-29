@@ -53,7 +53,7 @@
 (defn start
   {:dev/after-load true}
   []
-  (expo-root/render-root (r/as-element [root])))
+  (expo-root/render-root (r/as-element [#'root])))
 
 (defn init []
   (rf/dispatch-sync [:initialize-db])
