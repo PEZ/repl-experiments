@@ -12,6 +12,8 @@
 (def shadow-splash (js/require "../assets/shadow-cljs.png"))
 (def cljs-splash (js/require "../assets/cljs.png"))
 
+(defonce words-atom (r/atom nil))
+
 (defn input-widget [{:keys [style]}]
   (let [text @(rf/subscribe [:textinput-text])]
     [:> rn/View {:style style}
@@ -33,7 +35,9 @@
                           :align-self :center
                           :justify-content :center}}
       [button {:on-press (fn [_e]
-                           (rf/dispatch [:update-cloud text]))
+                           (rf/dispatch-sync [:update-cloud-text text])
+                           (reset! words-atom (-> @(rf/subscribe [:cloud-words])
+                                                  (shuffle))))
                :style {:background-color :blue}}
        "Work!"]]]))
 
@@ -66,8 +70,7 @@
 
 (defn word-cloud [{:keys [style]}]
   (let [all-words @(rf/subscribe [:all-words])
-        highest-freq (most-frequent all-words)
-        words @(rf/subscribe [:cloud-words])]
+        highest-freq (most-frequent all-words)]
     [:> rn/View style
      [:> rn/ScrollView {:style {:flex 1
                                 :padding 10}}
@@ -86,7 +89,7 @@
                                            :margin-horizontal 2
                                            :border-radius 3}}
                        word])
-                    words))]]))
+                    @words-atom))]]))
 
 (defn new-root []
   [:> rn/SafeAreaView {:style {:flex 1

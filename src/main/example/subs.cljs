@@ -27,10 +27,16 @@
  (fn [db _]
    (:all-words db)))
 
+(defn choose-cloud-words [all-words]
+  (->> all-words
+       (sort-by second)
+       (take-last 100)))
+
 (reg-sub
  :cloud-words
- (fn [db _]
-   (:cloud-words db)))
+ :<- [:all-words]
+ (fn [all-words _]
+   (choose-cloud-words all-words)))
 
 (comment
   (require '[clojure.string :as string])

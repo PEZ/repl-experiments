@@ -32,17 +32,8 @@
        (remove some-data/common-words)
        (frequencies)))
 
-(defn choose-cloud-words [all-words]
-  (->> all-words
-       (sort-by second)
-       (take-last 100)
-       (shuffle)))
-
 (reg-event-db
- :update-cloud
+ :update-cloud-text
  (fn [db [_ text]]
-   (let [all-words (extract-words-counted text)
-         cloud-words (choose-cloud-words all-words)]
-     (assoc db 
-            :all-words all-words
-            :cloud-words cloud-words))))
+   (let [all-words (extract-words-counted text)]
+     (assoc db :all-words all-words))))
