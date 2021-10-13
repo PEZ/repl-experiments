@@ -23,8 +23,7 @@
   (->> colt-express
        :ratings
        vals
-       average)
-  )
+       average))
 
 (comment
   (defn bar

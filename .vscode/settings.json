@@ -18,5 +18,7 @@
             "ns": "example.app",
             "snippet": "(start)"
         }
-    ]
+    ],
+    "editor.fontSize": 18,
+    "screencastMode.keyboardOverlayTimeout": 1500
 }
