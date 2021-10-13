@@ -1,16 +1,17 @@
 (ns example.subs
-  (:require [re-frame.core :refer [reg-sub]]))
+  (:require [re-frame.core :as rf]))
 
-(reg-sub
+(rf/reg-sub
  :counter
  (fn [db _]
    (:counter db)))
 
-(reg-sub
+(rf/reg-sub
  :counter-tappable?
  (fn [db _]
    (:counter-tappable? db)))
 
 (comment
+  @(rf/subscribe [:counter])
   (require '[clojure.string :as string])
   )
