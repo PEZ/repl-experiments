@@ -100,7 +100,7 @@
    [:> StatusBar {:style "auto"}]])
 
 (defn root []
-  (let [counter @(rf/subscribe [:fb-counter])
+  (let [counter @(rf/subscribe [:fizz-buzz])
         tap-enabled? @(rf/subscribe [:counter-tappable?])]
     [:> rn/View {:style {:flex 1
                          :padding-vertical 50

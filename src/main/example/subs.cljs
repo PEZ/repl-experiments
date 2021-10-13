@@ -9,8 +9,15 @@
 
 (reg-sub
  :fb-counter
- (fn [db _]
-   (fizz-buzz (:counter db))))
+ :<- [:get-counter]
+ (fn [counter _]
+   (fizz-buzz counter)))
+
+(reg-sub
+ :fizz-buzz
+ :<- [:get-counter]
+ (fn [counter _]
+   (fizz-buzz counter)))
 
 (reg-sub
  :counter-tappable?
