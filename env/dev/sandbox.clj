@@ -29,7 +29,6 @@
 (comment
   (defn bar
     [n]
-    (def n n)
     (cond (> n 40) (+ n 20)
           (> n 20) (- (first n) 20)
           :else 0))
